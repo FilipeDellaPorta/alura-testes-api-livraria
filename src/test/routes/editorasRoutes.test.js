@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect } from "@jest/globals"; //como vai rodar no jest não precisaria manter esta importação
+import { afterEach, beforeEach, describe, expect, test } from "@jest/globals"; //como vai rodar no jest não precisaria manter esta importação
 import app from "../../app.js";
 import request from "supertest";
 
@@ -45,15 +45,19 @@ describe("POST em /editoras", () => {
   });
 });
 
-describe("PUT em /editoras/id", () => {
-  it("Deve alterar o campo nome", async () => {
-    await request(app).put(`/editoras/${idResposta}`).send({ nome: "Casa do Código" }).expect(204);
+describe("GET em /editoras/id", () => {
+  it("Deve retornar editora selecionada", async () => {
+    await request(app).get(`/editoras/${idResposta}`).expect(200);
   });
 });
 
-describe("GET em /editoras/id", () => {
-  it("Deve retornar editora selecionada", async () => {
-    await request(app).delete(`/editoras/${idResposta}`).expect(200);
+describe("PUT em /editoras/id", () => {
+  test.each([
+    ["nome", { nome: "Casa do Código" }],
+    ["cidade", { cidade: "SP" }],
+    ["email", { email: "cdc@cdc.com" }],
+  ])("Deve alterar o campo %s", async (chave, param) => {
+    await request(app).put(`/editoras/${idResposta}`).send(param).expect(204);
   });
 });
 
