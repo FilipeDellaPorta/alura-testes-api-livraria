@@ -39,6 +39,22 @@ describe("POST em /editoras", () => {
 
     idResposta = resposta.body.content.id;
   });
+
+  it("Deve não adicionar nada ao passar body vazio", async () => {
+    await request(app).post("/editoras").send({}).expect(400);
+  });
+});
+
+describe("PUT em /editoras/id", () => {
+  it("Deve alterar o campo nome", async () => {
+    await request(app).put(`/editoras/${idResposta}`).send({ nome: "Casa do Código" }).expect(204);
+  });
+});
+
+describe("GET em /editoras/id", () => {
+  it("Deve retornar editora selecionada", async () => {
+    await request(app).delete(`/editoras/${idResposta}`).expect(200);
+  });
 });
 
 describe("DELETE em /editoras/id", () => {
@@ -46,9 +62,3 @@ describe("DELETE em /editoras/id", () => {
     await request(app).delete(`/editoras/${idResposta}`).expect(200);
   });
 });
-
-describe("GET em /editoras/id", () => {
-    it("Deve retornar editora selecionada", async () => {
-      await request(app).delete(`/editoras/${idResposta}`).expect(200);
-    });
-  });
